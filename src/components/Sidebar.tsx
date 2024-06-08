@@ -22,7 +22,7 @@ const Sidebar = () => {
             // -----------------------------------------------------------------
             // Is this link active?
             const isActive =
-              pathName === link.route || pathName.startsWith(link.route);
+              pathName === link.route || pathName.startsWith(`${link.route}/`);
             // -----------------------------------------------------------------
             return (
               <Link
