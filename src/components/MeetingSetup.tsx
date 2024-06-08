@@ -6,7 +6,6 @@ import {
 } from "@stream-io/video-react-sdk";
 import React, { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
 
 interface IProps {
   setIsSetupCompleted: React.Dispatch<React.SetStateAction<boolean>>;

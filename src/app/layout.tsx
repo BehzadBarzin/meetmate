@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+// Import stream Styles
+import "@stream-io/video-react-sdk/dist/css/styles.css";
+
 import CustomClerkProvider from "@/providers/ClerkProvider";
 import { Toaster } from "@/components/ui/toaster";
 
