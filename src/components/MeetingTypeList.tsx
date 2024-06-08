@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import HomeCard from "@/components/HomeCard";
 import { useRouter } from "next/navigation";
+import MeetingModal from "./MeetingModal";
 
 enum EMeetingType {
   isScheduleMeeting,
@@ -15,6 +16,9 @@ const MeetingTypeList = () => {
   const router = useRouter();
   // ---------------------------------------------------------------------------
   const [meetingState, setMeetingState] = useState<EMeetingType | undefined>();
+  // ---------------------------------------------------------------------------
+  // Helper function to start a new meeting (used in modal)
+  const createNewMeeting = () => {};
   // ---------------------------------------------------------------------------
   return (
     // Grid of 4 cards
@@ -49,6 +53,16 @@ const MeetingTypeList = () => {
         description="Meeting Recordings"
         extraClassNames="bg-yellow-1"
         handleClick={() => router.push("/recordings")}
+      />
+      {/* ------------------------------------------------------------------ */}
+      {/* Meeting Modal----------------------------------------------------- */}
+      <MeetingModal
+        isOpen={meetingState === EMeetingType.isInstantMeeting}
+        onClose={() => setMeetingState(undefined)}
+        title="Start an instant meeting"
+        extraClassNames="text-center"
+        buttonText="Start Meeting"
+        handleButtonClick={createNewMeeting}
       />
       {/* ------------------------------------------------------------------ */}
     </section>
