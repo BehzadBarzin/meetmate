@@ -35,7 +35,11 @@ const Meeting: FC<IProps> = ({ params: { id: meetingId } }) => {
       {/* StreamCall is a provider that provides the call instance to its children */}
       <StreamCall call={call}>
         <StreamTheme>
-          {!isSetupCompleted ? <MeetingSetup /> : <MeetingRoom />}
+          {!isSetupCompleted ? (
+            <MeetingSetup setIsSetupCompleted={setIsSetupCompleted} />
+          ) : (
+            <MeetingRoom />
+          )}
         </StreamTheme>
       </StreamCall>
     </main>
