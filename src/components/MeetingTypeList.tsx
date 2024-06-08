@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import HomeCard from "@/components/HomeCard";
 import { useRouter } from "next/navigation";
 import MeetingModal from "./MeetingModal";
+import { useUser } from "@clerk/nextjs";
+import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 
 enum EMeetingType {
   isScheduleMeeting,
@@ -17,8 +19,66 @@ const MeetingTypeList = () => {
   // ---------------------------------------------------------------------------
   const [meetingState, setMeetingState] = useState<EMeetingType | undefined>();
   // ---------------------------------------------------------------------------
-  // Helper function to start a new meeting (used in modal)
-  const createNewMeeting = () => {};
+  // ---------------------------------------------------------------------------
+  // State to hold new meeting info
+  const [meetingInfo, setMeetingInfo] = useState({
+    dateTime: new Date(),
+    description: "",
+    link: "",
+  });
+  // ---------------------------------------------------------------------------
+  // State to hold created meeting's details
+  const [meetingDetails, setMeetingDetails] = useState<Call | undefined>();
+  // ---------------------------------------------------------------------------
+  // Get the authenticated user
+  const { user } = useUser();
+  // ---------------------------------------------------------------------------
+  // Get the Stream video client (initiated by the StreamClientProvider)
+  const client = useStreamVideoClient();
+  // ---------------------------------------------------------------------------
+  // Helper function to start a new instant meeting (used in modal)
+  const createNewMeeting = async () => {
+    // -------------------------------------------------------------------------
+    if (!user || !client) return;
+    // -------------------------------------------------------------------------
+    try {
+      // Generate a random ID for the meeting
+      const id = crypto.randomUUID();
+      // Create a call
+      const call = client.call("default", id);
+      if (!call) throw new Error("Failed to create a new call.");
+      // Meeting start time
+      const startsAt =
+        meetingInfo.dateTime.toISOString() ||
+        new Date(Date.now()).toISOString();
+      // Meeting description
+      const description = meetingInfo.description || "Instant Meeting";
+      // Create the meeting
+      await call.getOrCreate({
+        data: {
+          starts_at: startsAt,
+          custom: {
+            description,
+          },
+        },
+      });
+      // Set the meeting details
+      setMeetingDetails(call);
+
+      // If no description, it is an instant meeting
+      if (!meetingInfo.description) {
+        // Navigate to the meeting page
+        router.push(`/meeting/${call.id}`);
+      }
+    } catch (error) {
+      console.error(
+        "Something went wrong when starting a new meeting. ",
+        error
+      );
+    }
+    // -------------------------------------------------------------------------
+  };
+  // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   return (
     // Grid of 4 cards
