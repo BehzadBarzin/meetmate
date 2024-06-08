@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
+import { useToast } from "./ui/use-toast";
 
 enum EMeetingType {
   isScheduleMeeting,
@@ -13,6 +14,9 @@ enum EMeetingType {
 }
 
 const MeetingTypeList = () => {
+  // ---------------------------------------------------------------------------
+  // To show toast messages
+  const { toast } = useToast();
   // ---------------------------------------------------------------------------
   // To navigate to different pages
   const router = useRouter();
@@ -36,12 +40,20 @@ const MeetingTypeList = () => {
   // Get the Stream video client (initiated by the StreamClientProvider)
   const client = useStreamVideoClient();
   // ---------------------------------------------------------------------------
-  // Helper function to start a new instant meeting (used in modal)
+  // Helper function to start a new meeting (Instant + Scheduled)
   const createNewMeeting = async () => {
     // -------------------------------------------------------------------------
     if (!user || !client) return;
     // -------------------------------------------------------------------------
     try {
+      if (!meetingInfo.dateTime) {
+        // Show error toast
+        toast({
+          title: "Please provide a date and time.",
+        });
+        return;
+      }
+
       // Generate a random ID for the meeting
       const id = crypto.randomUUID();
       // Create a call
@@ -70,7 +82,17 @@ const MeetingTypeList = () => {
         // Navigate to the meeting page
         router.push(`/meeting/${call.id}`);
       }
+
+      // Show success toast
+      toast({
+        title: "Meeting created successfully.",
+      });
     } catch (error) {
+      // Show error toast
+      toast({
+        title: "Something went wrong when starting a new meeting.",
+      });
+      // Log the error
       console.error(
         "Something went wrong when starting a new meeting. ",
         error

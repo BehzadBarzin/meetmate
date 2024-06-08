@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import CustomClerkProvider from "@/providers/ClerkProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <CustomClerkProvider>
-        <body className={`${inter.className} bg-dark-2`}>{children}</body>
+        <body className={`${inter.className} bg-dark-2`}>
+          {/* Main Content-------------------------------------------------- */}
+          {children}
+          {/* Toast Messages------------------------------------------------ */}
+          <Toaster />
+        </body>
       </CustomClerkProvider>
     </html>
   );
