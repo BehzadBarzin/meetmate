@@ -50,7 +50,7 @@ const MeetingModal: FC<IProps> = ({
           {/* Button-------------------------------------------------------- */}
           <Button
             className={
-              "bg-blue-1 hover:bg-blue-700 focus-visible:ring-0 focus-visible:ring-offset-0"
+              "bg-blue-1 focus-visible:ring-0 focus-visible:ring-offset-0"
             }
             onClick={handleButtonClick}
           >

@@ -131,3 +131,21 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
+
+/* ======== stream css overrides ======== */
+
+/* Remove background color */
+button.str-video__call-controls__button.str-video__menu-toggle-button {
+  background-color: transparent !important;
+}
+
+/* Remove font */
+.str-video__device-settings__option {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* ==== clerk class override ===== */
+
+.cl-logoBox {
+  height: 40px;
+}
