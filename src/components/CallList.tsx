@@ -56,6 +56,8 @@ const CallList: FC<IProps> = ({ type }) => {
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
   useEffect(() => {
+    // -------------------------------------------------------------------------
+    // Query recordings for each call and flatten the result and set to state
     const fetchRecordings = async () => {
       const callData = await Promise.all(
         callRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
@@ -67,10 +69,12 @@ const CallList: FC<IProps> = ({ type }) => {
 
       setRecordings(recordings);
     };
-
+    // -------------------------------------------------------------------------
+    // Only if this component is of type "recordings", fetch recordings
     if (type === "recordings") {
       fetchRecordings();
     }
+    // -------------------------------------------------------------------------
   }, [type, callRecordings]);
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
