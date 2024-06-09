@@ -6,6 +6,8 @@ import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "./ui/use-toast";
+import { Textarea } from "./ui/textarea";
+import ReactDatePicker from "react-datepicker";
 
 enum EMeetingType {
   isScheduleMeeting,
@@ -102,6 +104,9 @@ const MeetingTypeList = () => {
   };
   // ---------------------------------------------------------------------------
   // ---------------------------------------------------------------------------
+  // Meeting Link
+  const meetingLink = `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${meetingDetails?.id}`;
+  // ---------------------------------------------------------------------------
   return (
     // Grid of 4 cards
     <section className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -138,6 +143,64 @@ const MeetingTypeList = () => {
       />
       {/* ------------------------------------------------------------------ */}
       {/* Meeting Modal----------------------------------------------------- */}
+      {/* 1.Modal: for Scheduling meetings---------------------------------- */}
+      {!meetingDetails ? (
+        // Schedule a new meeting
+        <MeetingModal
+          isOpen={meetingState === EMeetingType.isScheduleMeeting}
+          onClose={() => setMeetingState(undefined)}
+          title="Schedule a Meeting"
+          handleButtonClick={createNewMeeting}
+        >
+          {/* Schedule Meeting Form----------------------------------------- */}
+          <div className="flex flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22.4px] text-sky-2">
+              Write a short description
+            </label>
+            <Textarea
+              className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+              onChange={(e) =>
+                setMeetingInfo({ ...meetingInfo, description: e.target.value })
+              }
+            />
+          </div>
+          <div className="flex w-full flex-col gap-2.5">
+            <label className="text-base font-normal leading-[22.4px] text-sky-2">
+              Select Date and Time for Meeting
+            </label>
+            <ReactDatePicker
+              selected={meetingInfo.dateTime}
+              onChange={(date) =>
+                setMeetingInfo({ ...meetingInfo, dateTime: date! })
+              }
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="MMMM d, yyyy h:mm aa"
+              className="w-full rounded bg-dark-3 p-2 focus:outline-none"
+            />
+          </div>
+          {/* -------------------------------------------------------------- */}
+        </MeetingModal>
+      ) : (
+        // Meeting created, copy link
+        <MeetingModal
+          isOpen={meetingState === EMeetingType.isScheduleMeeting}
+          onClose={() => setMeetingState(undefined)}
+          title="Meeting Created"
+          handleButtonClick={() => {
+            navigator.clipboard.writeText(meetingLink);
+            toast({ title: "Meeting Link Copied" });
+          }}
+          image={"/icons/checked.svg"}
+          buttonIcon="/icons/copy.svg"
+          extraClassNames="text-center"
+          buttonText="Copy Meeting Link"
+        />
+      )}
+      {/* ------------------------------------------------------------------ */}
+      {/* 2.Modal: for Instant meetings------------------------------------- */}
       <MeetingModal
         isOpen={meetingState === EMeetingType.isInstantMeeting}
         onClose={() => setMeetingState(undefined)}
@@ -146,6 +209,7 @@ const MeetingTypeList = () => {
         buttonText="Start Meeting"
         handleButtonClick={createNewMeeting}
       />
+      {/* ------------------------------------------------------------------ */}
       {/* ------------------------------------------------------------------ */}
     </section>
   );

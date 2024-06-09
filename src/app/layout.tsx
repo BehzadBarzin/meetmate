@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 // Import stream Styles
 import "@stream-io/video-react-sdk/dist/css/styles.css";
+// Import React Datepicker styles
+import "react-datepicker/dist/react-datepicker.css";
 
 import CustomClerkProvider from "@/providers/ClerkProvider";
 import { Toaster } from "@/components/ui/toaster";
