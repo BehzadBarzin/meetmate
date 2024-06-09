@@ -13,7 +13,7 @@ const Sidebar = () => {
   const pathName = usePathname();
   // ---------------------------------------------------------------------------
   return (
-    <section className="sticky left-0 flex flex-col justify-between bg-dark-1 h-screen w-fit p-6 pt-28 text-white max-sm:hidden lg:w-[264px]">
+    <section className="sticky left-0 flex flex-col justify-between h-screen w-fit bg-dark-1 p-6 pt-28 text-white max-sm:hidden lg:w-[264px]">
       <div className="flex flex-col flex-1 gap-6">
         {/* Sidebar Links--------------------------------------------------- */}
         {
