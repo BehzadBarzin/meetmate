@@ -7,6 +7,7 @@ import { useGetCalls } from "@/hooks/useGetCalls";
 import MeetingCard from "./MeetingCard";
 import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import EmptyState from "./EmptyState";
 
 interface IProps {
   type: "ended" | "upcoming" | "recordings";
@@ -130,7 +131,7 @@ const CallList: FC<IProps> = ({ type }) => {
       ) : (
         // Show appropriate "no calls" message if no calls are available
         // value depends on "type" prop of the component
-        <h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
+        <EmptyState title={noCallsMessage} />
       )}
     </div>
   );
